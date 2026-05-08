@@ -33,6 +33,7 @@ def get_worksheet(sheet_name):
 # ==========================================
 # 💡 クラウド版：データの読み書き関数
 # ==========================================
+@st.cache_data(ttl=600)  # 👈 追加：データを10分間（600秒）キャッシュする
 def load_data(file_path):
     """スプレッドシートのタブのA1セルからJSONデータを読み込む"""
     # 例: "data/goals.json" から "goals" というタブ名を抽出
@@ -55,9 +56,11 @@ def save_data(file_path, data):
         worksheet = get_worksheet(sheet_name)
         data_str = json.dumps(data, ensure_ascii=False, indent=4)
         worksheet.update_acell('A1', data_str)
+        # 👈 追加：新しく保存したら、古いキャッシュ（記憶）をリセットして最新化する
+        load_data.clear()
     except Exception as e:
         st.error(f"データ保存エラー ({sheet_name}): {e}")
-        
+
 def generate_ai_strategy():
     """目標と教材データから、AI戦略を生成して strategy.json に保存する共通関数"""
     goals = load_data("data/goals.json")
