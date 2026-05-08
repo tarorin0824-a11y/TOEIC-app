@@ -4,7 +4,7 @@ import os
 import uuid
 import time
 import google.generativeai as genai
-from dotenv import load_dotenv
+#from dotenv import load_dotenv
 # 💡 utils.py から共通の関数をインポート
 from utils import load_data, save_data, generate_ai_strategy
 from utils import check_password
@@ -17,8 +17,9 @@ if not check_password():
 st.set_page_config(page_title="教材管理", layout="wide", page_icon="📚")
 st.title("📚 教材の登録と管理")
 
-load_dotenv()
-api_key = os.environ.get("GEMINI_API_KEY")
+#load_dotenv()
+#api_key = os.environ.get("GEMINI_API_KEY")
+api_key = st.secrets["GEMINI_API_KEY"]
 
 if not api_key:
     st.error("⚠️ .envファイルに GEMINI_API_KEY が設定されていません。")
